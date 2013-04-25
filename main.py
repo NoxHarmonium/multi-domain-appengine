@@ -11,10 +11,7 @@ import time
 from datetime import date
 from datetime import timedelta
 
-def parseDate(date):
-	return datetime.strptime(date, "%a, %d %b %Y %H:%M:%S %Z")
-def formatDate(date):
-	return date.strftime("%a, %d %b %Y %H:%M:%S %Z")
+import utils
 
 class MainHandler(webapp2.RequestHandler):
 	def get (self,path):
