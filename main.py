@@ -16,6 +16,12 @@ from datetime import timedelta
 # User code imports
 import utils
 
+# Constants
+subpath 	  =	'html' 
+cache-control =	'Public, max-age=31536000'
+expire-length =	timedelta(days=365)
+
+
 class MainHandler(webapp2.RequestHandler):
 	def get (self,path):
 		# Initialise the mime type utility
@@ -27,12 +33,12 @@ class MainHandler(webapp2.RequestHandler):
 			path = 'index.html'
 		
 		# Get the file location on the server
-		path = os.path.join(os.path.dirname (__file__), self.request.route.name,"html", path)
+		path = os.path.join(os.path.dirname (__file__), self.request.route.name,subpath, path)
 		
 		# Set response headers
 		self.response.headers['Content-Type'] = mimetypes.guess_type(path)[0];
-		self.response.headers['Cache-Control'] = 'Public, max-age=31536000';
-		self.response.headers['Expires'] = formatDate(date.today() + timedelta(days=365))
+		self.response.headers['Cache-Control'] = cache-control;
+		self.response.headers['Expires'] = formatDate(date.today() + expire-length)
 		
 		lastUpdateTime = None
 		
