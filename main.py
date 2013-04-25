@@ -1,6 +1,8 @@
 #
-# Host Statuc
+# Main Handler File
 #
+
+# Python imports
 import os
 import webapp2
 from webapp2_extras import routes
@@ -11,14 +13,14 @@ import time
 from datetime import date
 from datetime import timedelta
 
+# User code imports
 import utils
 
 class MainHandler(webapp2.RequestHandler):
 	def get (self,path):
 		# Initialise the mime type utility
 		if not(mimetypes.inited):
-			mimetypes.init()
-			
+			mimetypes.init()			
 		
 		# No path defaults to home page
 		if path is None or path == '/' or path == '':
@@ -34,17 +36,19 @@ class MainHandler(webapp2.RequestHandler):
 		
 		lastUpdateTime = None
 		
-		try:		
+		# If there is an 'If-Modified-Since' header, use it to see if the 
+		# the file has changed since the client last downloaded it.
+		try:					
 			lastUpdateTime = self.request.headers['If-Modified-Since'];
 		except:
-			pass
-		
+			pass		
 		if not (lastUpdateTime is None or lastUpdateTime == ''):
 			lastUpdateTime = parseDate(lastUpdateTime)
 			fileModTime = os.stat(path).st_mtime
 			if lastUpdateTime < fileModTime:
-				self.response.set_status(304)
-		
+				# Status code 304 means the file hasn't changed (send no data)
+				self.response.set_status(304)			
+			
 		else:
 			# Read the server file
 			out = open(path,'rb').read()
@@ -55,14 +59,15 @@ class MainHandler(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-	routes.DomainRoute('www.noxharmonium.com', [
-		webapp2.Route('/<path:.*?>', handler=MainHandler,  name='www.noxharmonium.com'),
+	routes.DomainRoute('www.exampledomain1.com', [
+		webapp2.Route('/<path:.*?>', handler=MainHandler,  name='www.exampledomain1.com'),
 	]),
-	routes.DomainRoute('www.seandawson.info', [
-		webapp2.Route('/<path:.*?>', handler=MainHandler, name='www.seandawson.info'),
+	routes.DomainRoute('www.exampledomain2.com', [
+		webapp2.Route('/<path:.*?>', handler=MainHandler, name='www.exampledomain2.com'),
 	]),
+	# localhost defaults to first domain
 	routes.DomainRoute('localhost', [
-		webapp2.Route('/<path:.*?>', handler=MainHandler, name='www.seandawson.info'),
+		webapp2.Route('/<path:.*?>', handler=MainHandler, name='www.exampledomain1.com'),
 	])
 		
 ], debug=True)	
