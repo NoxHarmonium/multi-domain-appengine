@@ -1,0 +1,19 @@
+application: nox-harmonium
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+
+
+- url: /favicon.ico
+  static_files: www.seandawson.info/html/favicon.ico
+  upload: images/favicon.ico
+  mime_type: image/x-icon
+  
+- url: /.*
+  script: main.app
+  
+
+
