@@ -1,7 +1,7 @@
 multi-domain-appengine
 ======================
 
-### Template for building a multi domain web host on the Google App Engine platform.
+### Template for hosting multiple domains on a single Google App Engine instance.
 
 All the magic happens in the route entries inside app.yaml. For example:
 
